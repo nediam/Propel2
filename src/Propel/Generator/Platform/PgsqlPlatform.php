@@ -645,7 +645,7 @@ DROP SEQUENCE %s CASCADE;
             throw new EngineException('PostgreSQL needs a sequence name to fetch primary keys');
         }
         $snippet = "
-\$dataFetcher = %s->query(\"SELECT nextval('%s')\");
+\$dataFetcher = %s->query('SELECT nextval(\\'%s\\')');
 %s = \$dataFetcher->fetchColumn();";
         $script = sprintf($snippet,
             $connectionVariableName,
