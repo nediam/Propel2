@@ -40,25 +40,25 @@ class PgsqlPlatformMigrationTest extends PlatformMigrationTestProvider
     {
         $expected = <<<END
 
-DROP TABLE IF EXISTS foo1 CASCADE;
+DROP TABLE IF EXISTS "foo1" CASCADE;
 
-ALTER TABLE foo3 RENAME TO foo4;
+ALTER TABLE "foo3" RENAME TO "foo4";
 
-CREATE TABLE foo5
+CREATE TABLE "foo5"
 (
-    id serial NOT NULL,
-    lkdjfsh INTEGER,
-    dfgdsgf TEXT,
-    PRIMARY KEY (id)
+    "id" serial NOT NULL,
+    "lkdjfsh" INTEGER,
+    "dfgdsgf" TEXT,
+    PRIMARY KEY ("id")
 );
 
-ALTER TABLE foo2 RENAME COLUMN bar TO bar1;
+ALTER TABLE "foo2" RENAME COLUMN "bar" TO "bar1";
 
-ALTER TABLE foo2
+ALTER TABLE "foo2"
 
-  ALTER COLUMN baz DROP NOT NULL,
+  ALTER COLUMN "baz" DROP NOT NULL,
 
-  ADD baz3 TEXT;
+  ADD "baz3" TEXT;
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyDatabaseDDL($databaseDiff));
@@ -69,9 +69,9 @@ END;
      */
     public function testGetRenameTableDDL($fromName, $toName)
     {
-        $expected = "
-ALTER TABLE foo1 RENAME TO foo2;
-";
+        $expected = '
+ALTER TABLE "foo1" RENAME TO "foo2";
+';
         $this->assertEquals($expected, $this->getPlatform()->getRenameTableDDL($fromName, $toName));
     }
 
@@ -82,29 +82,29 @@ ALTER TABLE foo1 RENAME TO foo2;
     {
         $expected = <<<END
 
-ALTER TABLE foo DROP CONSTRAINT foo1_fk_2;
+ALTER TABLE "foo" DROP CONSTRAINT "foo1_fk_2";
 
-ALTER TABLE foo DROP CONSTRAINT foo1_fk_1;
+ALTER TABLE "foo" DROP CONSTRAINT "foo1_fk_1";
 
-DROP INDEX bar_baz_fk;
+DROP INDEX "bar_baz_fk";
 
-DROP INDEX bar_fk;
+DROP INDEX "bar_fk";
 
-ALTER TABLE foo RENAME COLUMN bar TO bar1;
+ALTER TABLE "foo" RENAME COLUMN "bar" TO "bar1";
 
-ALTER TABLE foo
+ALTER TABLE "foo"
 
-  ALTER COLUMN baz DROP NOT NULL,
+  ALTER COLUMN "baz" DROP NOT NULL,
 
-  ADD baz3 TEXT;
+  ADD "baz3" TEXT;
 
-CREATE INDEX bar_fk ON foo (bar1);
+CREATE INDEX "bar_fk" ON "foo" ("bar1");
 
-CREATE INDEX baz_fk ON foo (baz3);
+CREATE INDEX "baz_fk" ON "foo" ("baz3");
 
-ALTER TABLE foo ADD CONSTRAINT foo1_fk_1
-    FOREIGN KEY (bar1)
-    REFERENCES foo2 (bar);
+ALTER TABLE "foo" ADD CONSTRAINT "foo1_fk_1"
+    FOREIGN KEY ("bar1")
+    REFERENCES "foo2" ("bar");
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyTableDDL($tableDiff));
@@ -117,11 +117,11 @@ END;
     {
         $expected = <<<END
 
-ALTER TABLE foo RENAME COLUMN bar TO bar1;
+ALTER TABLE "foo" RENAME COLUMN "bar" TO "bar1";
 
-ALTER TABLE foo ALTER COLUMN baz DROP NOT NULL;
+ALTER TABLE "foo" ALTER COLUMN "baz" DROP NOT NULL;
 
-ALTER TABLE foo ADD baz3 TEXT;
+ALTER TABLE "foo" ADD "baz3" TEXT;
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyTableColumnsDDL($tableDiff));
@@ -134,9 +134,9 @@ END;
     {
         $expected = <<<END
 
-ALTER TABLE foo DROP CONSTRAINT foo_pkey;
+ALTER TABLE "foo" DROP CONSTRAINT "foo_pkey";
 
-ALTER TABLE foo ADD PRIMARY KEY (id,bar);
+ALTER TABLE "foo" ADD PRIMARY KEY ("id","bar");
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyTablePrimaryKeyDDL($tableDiff));
@@ -149,13 +149,13 @@ END;
     {
         $expected = <<<END
 
-DROP INDEX bar_fk;
+DROP INDEX "bar_fk";
 
-CREATE INDEX baz_fk ON foo (baz);
+CREATE INDEX "baz_fk" ON "foo" ("baz");
 
-DROP INDEX bar_baz_fk;
+DROP INDEX "bar_baz_fk";
 
-CREATE INDEX bar_baz_fk ON foo (id,bar,baz);
+CREATE INDEX "bar_baz_fk" ON "foo" ("id","bar","baz");
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyTableIndicesDDL($tableDiff));
@@ -168,17 +168,17 @@ END;
     {
         $expected = <<<END
 
-ALTER TABLE foo1 DROP CONSTRAINT foo1_fk_1;
+ALTER TABLE "foo1" DROP CONSTRAINT "foo1_fk_1";
 
-ALTER TABLE foo1 ADD CONSTRAINT foo1_fk_3
-    FOREIGN KEY (baz)
-    REFERENCES foo2 (baz);
+ALTER TABLE "foo1" ADD CONSTRAINT "foo1_fk_3"
+    FOREIGN KEY ("baz")
+    REFERENCES "foo2" ("baz");
 
-ALTER TABLE foo1 DROP CONSTRAINT foo1_fk_2;
+ALTER TABLE "foo1" DROP CONSTRAINT "foo1_fk_2";
 
-ALTER TABLE foo1 ADD CONSTRAINT foo1_fk_2
-    FOREIGN KEY (bar,id)
-    REFERENCES foo2 (bar,id);
+ALTER TABLE "foo1" ADD CONSTRAINT "foo1_fk_2"
+    FOREIGN KEY ("bar","id")
+    REFERENCES "foo2" ("bar","id");
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyTableForeignKeysDDL($tableDiff));
@@ -191,15 +191,15 @@ END;
     {
         $expected = <<<END
 
-ALTER TABLE foo1 DROP CONSTRAINT foo1_fk_1;
+ALTER TABLE "foo1" DROP CONSTRAINT "foo1_fk_1";
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyTableForeignKeysDDL($tableDiff));
         $expected = <<<END
 
-ALTER TABLE foo1 ADD CONSTRAINT foo1_fk_1
-    FOREIGN KEY (bar)
-    REFERENCES foo2 (bar);
+ALTER TABLE "foo1" ADD CONSTRAINT "foo1_fk_1"
+    FOREIGN KEY ("bar")
+    REFERENCES "foo2" ("bar");
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyTableForeignKeysDDL($tableDiff->getReverseDiff()));
@@ -221,9 +221,9 @@ END;
      */
     public function testGetRemoveColumnDDL($column)
     {
-        $expected = "
-ALTER TABLE foo DROP COLUMN bar;
-";
+        $expected = '
+ALTER TABLE "foo" DROP COLUMN "bar";
+';
         $this->assertEquals($expected, $this->getPlatform()->getRemoveColumnDDL($column));
     }
 
@@ -232,9 +232,9 @@ ALTER TABLE foo DROP COLUMN bar;
      */
     public function testGetRenameColumnDDL($fromColumn, $toColumn)
     {
-        $expected = "
-ALTER TABLE foo RENAME COLUMN bar1 TO bar2;
-";
+        $expected = '
+ALTER TABLE "foo" RENAME COLUMN "bar1" TO "bar2";
+';
         $this->assertEquals($expected, $this->getPlatform()->getRenameColumnDDL($fromColumn, $toColumn));
     }
 
@@ -243,9 +243,9 @@ ALTER TABLE foo RENAME COLUMN bar1 TO bar2;
      */
     public function testGetModifyColumnDDL($columnDiff)
     {
-        $expected = "
-ALTER TABLE foo ALTER COLUMN bar TYPE DOUBLE PRECISION;
-";
+        $expected = '
+ALTER TABLE "foo" ALTER COLUMN "bar" TYPE DOUBLE PRECISION;
+';
         $this->assertEquals($expected, $this->getPlatform()->getModifyColumnDDL($columnDiff));
     }
 
@@ -265,9 +265,9 @@ ALTER TABLE foo ALTER COLUMN bar TYPE DOUBLE PRECISION;
         $columnDiff = ColumnComparator::computeDiff($c1, $c2);
         $expected = <<<END
 
-ALTER TABLE foo ALTER COLUMN bar TYPE DOUBLE PRECISION;
+ALTER TABLE "foo" ALTER COLUMN "bar" TYPE DOUBLE PRECISION;
 
-ALTER TABLE foo ALTER COLUMN bar SET DEFAULT -100;
+ALTER TABLE "foo" ALTER COLUMN "bar" SET DEFAULT -100;
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyColumnDDL($columnDiff));
@@ -280,9 +280,9 @@ END;
     {
         $expected = <<<END
 
-ALTER TABLE foo ALTER COLUMN bar1 TYPE DOUBLE PRECISION;
+ALTER TABLE "foo" ALTER COLUMN "bar1" TYPE DOUBLE PRECISION;
 
-ALTER TABLE foo ALTER COLUMN bar2 SET NOT NULL;
+ALTER TABLE "foo" ALTER COLUMN "bar2" SET NOT NULL;
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getModifyColumnsDDL($columnDiffs));
@@ -293,9 +293,9 @@ END;
      */
     public function testGetAddColumnDDL($column)
     {
-        $expected = "
-ALTER TABLE foo ADD bar INTEGER;
-";
+        $expected = '
+ALTER TABLE "foo" ADD "bar" INTEGER;
+';
         $this->assertEquals($expected, $this->getPlatform()->getAddColumnDDL($column));
     }
 
@@ -306,9 +306,9 @@ ALTER TABLE foo ADD bar INTEGER;
     {
         $expected = <<<END
 
-ALTER TABLE foo ADD bar1 INTEGER;
+ALTER TABLE "foo" ADD "bar1" INTEGER;
 
-ALTER TABLE foo ADD bar2 DOUBLE PRECISION DEFAULT -1 NOT NULL;
+ALTER TABLE "foo" ADD "bar2" DOUBLE PRECISION DEFAULT -1 NOT NULL;
 
 END;
         $this->assertEquals($expected, $this->getPlatform()->getAddColumnsDDL($columns));
@@ -376,7 +376,7 @@ EOF;
     {
         $expected = <<<EOF
 
-ALTER TABLE test ALTER COLUMN test DROP DEFAULT;
+ALTER TABLE "test" ALTER COLUMN "test" DROP DEFAULT;
 
 EOF;
         $this->assertEquals($expected, $this->getPlatform()->getModifyColumnDDL($columnDiffs));
