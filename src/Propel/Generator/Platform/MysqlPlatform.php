@@ -32,11 +32,6 @@ use Propel\Generator\Model\Diff\DatabaseDiff;
 class MysqlPlatform extends DefaultPlatform
 {
 
-    /**
-     * @var boolean whether the identifier quoting is enabled
-     */
-    protected $isIdentifierQuotingEnabled = true;
-
     protected $tableEngineKeyword = 'ENGINE';  // overwritten in build.properties
     protected $defaultTableEngine = 'MyISAM';  // overwritten in build.properties
 
