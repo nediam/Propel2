@@ -7,6 +7,51 @@ namespace Propel\Tests\Generator\Migration;
  */
 class BaseTest extends MigrationTestCase
 {
+    public function testSimpleAdd()
+    {
+        $originXml = '
+<database>
+    <table name="migration_test_0">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+    </table>
+</database>
+';
+
+        $targetXml = '
+<database>
+    <table name="migration_test_0">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="char" type="CHAR" size="1" />
+    </table>
+</database>
+';
+        $this->applyXmlAndTest($originXml);
+        $this->applyXmlAndTest($targetXml);
+    }
+
+    public function testCharToChar()
+    {
+        $originXml = '
+<database>
+    <table name="migration_test_1">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="char" type="CHAR" size="1" />
+    </table>
+</database>
+';
+
+        $targetXml = '
+<database>
+    <table name="migration_test_1">
+        <column name="id" type="integer" primaryKey="true" autoIncrement="true" />
+        <column name="char" type="CHAR" size="1" />
+    </table>
+</database>
+';
+
+        $this->applyXmlAndTest($originXml);
+        $this->applyXmlAndTest($targetXml);
+    }
 
     public function testColumnRequireChange()
     {

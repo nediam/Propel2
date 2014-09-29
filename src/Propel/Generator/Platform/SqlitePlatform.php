@@ -41,7 +41,7 @@ class SqlitePlatform extends DefaultPlatform
      *
      * @var bool
      */
-    private $foreignKeySupport = null;
+    protected $foreignKeySupport = null;
 
     /**
      * If we should alter the table through creating a temporarily created table,
@@ -49,7 +49,7 @@ class SqlitePlatform extends DefaultPlatform
      *
      * @var bool
      */
-    private $tableAlteringWorkaround = true;
+    protected $tableAlteringWorkaround = true;
 
     /**
      * Initializes db specific domain mapping.
@@ -79,6 +79,18 @@ class SqlitePlatform extends DefaultPlatform
     public function getSchemaDelimiter()
     {
         return '§';
+    }
+
+    public function getDefaultTypeSizes()
+    {
+        return array(
+            'char'      => 1,
+            'character' => 1,
+            'integer'   => 32,
+            'bigint'    => 64,
+            'smallint'  => 16,
+            'double precision' => 54
+        );
     }
 
     /**
@@ -113,6 +125,8 @@ ALTER TABLE %s ADD %s;
                 $this->getColumnDDL($column)
             );
         }
+
+        return $ret;
     }
 
     /**
@@ -120,7 +134,6 @@ ALTER TABLE %s ADD %s;
      */
     public function getModifyTableDDL(TableDiff $tableDiff)
     {
-
         $changedNotEditableThroughDirectDDL = $this->tableAlteringWorkaround && (false
             || $tableDiff->hasModifiedFks()
             || $tableDiff->hasModifiedIndices()

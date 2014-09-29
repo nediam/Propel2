@@ -580,6 +580,8 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
      * @param     mixed \$key Primary key to use for the query
      * @param     ConnectionInterface \$con A connection object
      *
+     * @throws \\Propel\\Runtime\\Exception\\PropelException
+     *
      * @return $ARClassName A model object, or null if the key is not found
      */
     protected function findPkSimple(\$key, ConnectionInterface \$con)
@@ -852,7 +854,7 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
     {
         $colPhpName = $col->getPhpName();
         $colName = $col->getName();
-        $variableName = $col->getStudlyPhpName();
+        $variableName = $col->getCamelCaseName();
         $qualifiedName = $this->getColumnConstant($col);
         $script .= "
     /**
@@ -1047,7 +1049,7 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
         $colPhpName = $col->getPhpName();
         $singularPhpName = $col->getPhpSingularName();
         $colName = $col->getName();
-        $variableName = $col->getStudlyPhpName();
+        $variableName = $col->getCamelCaseName();
         $qualifiedName = $this->getColumnConstant($col);
         $script .= "
     /**
@@ -1101,7 +1103,7 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
         $this->declareClassFromBuilder($fkStubObjectBuilder);
         $fkPhpName = $this->getClassNameFromBuilder($fkStubObjectBuilder, true);
         $relationName = $this->getFKPhpNameAffix($fk);
-        $objectName = '$' . $fkTable->getStudlyPhpName();
+        $objectName = '$' . $fkTable->getCamelCaseName();
         $script .= "
     /**
      * Filter the query by a related $fkPhpName object
@@ -1115,6 +1117,8 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
         }
         $script .= "
      * @param string \$comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \\Propel\\Runtime\\Exception\\PropelException
      *
      * @return $queryClass The current query, for fluid interface
      */
@@ -1176,7 +1180,7 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
         $this->declareClassFromBuilder($fkStubObjectBuilder);
         $fkPhpName = $this->getClassNameFromBuilder($fkStubObjectBuilder, true);
         $relationName = $this->getRefFKPhpNameAffix($fk);
-        $objectName = '$' . $fkTable->getStudlyPhpName();
+        $objectName = '$' . $fkTable->getCamelCaseName();
         $script .= "
     /**
      * Filter the query by a related $fkPhpName object
@@ -1359,7 +1363,7 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
             $fkPhpName =  $foreignTable->getPhpName();
             $crossTableName = $crossRefTable->getName();
             $relName = $this->getFKPhpNameAffix($crossFK, $plural = false);
-            $objectName = '$' . $foreignTable->getStudlyPhpName();
+            $objectName = '$' . $foreignTable->getCamelCaseName();
             $script .= "
     /**
      * Filter the query by a related $fkPhpName object
@@ -1389,7 +1393,7 @@ abstract class ".$this->getUnqualifiedClassName()." extends " . $parentClass . "
     {
         $table = $this->getTable();
         $class = $this->getObjectClassName();
-        $objectName = '$' . $table->getStudlyPhpName();
+        $objectName = '$' . $table->getCamelCaseName();
 
         $script .= "
     /**

@@ -54,20 +54,11 @@ abstract class AbstractCommand extends Command
             return new GeneratorConfig(null, $properties);
         }
 
-        $inputDir = null;
-
-        if ($input->hasOption('input-dir')) {
-            //For SqlInsertCommand `input-dir` is the directory containing sql to insert
-            if (!($this instanceof SqlInsertCommand)) {
-                $inputDir = $input->getOption('input-dir');
-            }
-        }
-
         if ($input->hasOption('platform') && (null !== $input->getOption('platform'))) {
             $properties['propel']['generator']['platformClass'] = '\\Propel\\Generator\\Platform\\' . $input->getOption('platform');
         }
 
-        return new GeneratorConfig($inputDir, $properties);
+        return new GeneratorConfig($input->getOption('input-dir'), $properties);
     }
 
     /**
@@ -178,11 +169,11 @@ abstract class AbstractCommand extends Command
         return $config;
     }
     
-    /*
+    /**
      * Check if a given input option exists and it isn't null.
      *
      * @param string $option The name of the input option to check
-     * @param Symfony\Component\Console\Input\InputInterface Input object
+     * @param \Symfony\Component\Console\Input\InputInterface $input object
      *
      * @return boolean
      */
@@ -191,11 +182,11 @@ abstract class AbstractCommand extends Command
         return $input->hasOption($option) && null !== $input->getOption($option);
     }
     
-    /*
+    /**
      * Check if a given input argument exists and it isn't null.
      *
      * @param string $argument The name of the input argument to check
-     * @param Symfony\Component\Console\Input\InputInterface Input object
+     * @param \Symfony\Component\Console\Input\InputInterface $input object
      *
      * @return boolean
      */
