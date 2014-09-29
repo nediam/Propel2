@@ -29,6 +29,12 @@ use Propel\Generator\Model\Unique;
  */
 class SqlitePlatform extends DefaultPlatform
 {
+
+    /**
+     * @var boolean whether the identifier quoting is enabled
+     */
+    protected $isIdentifierQuotingEnabled = false;
+
     /**
      * If we should generate FOREIGN KEY statements.
      * This is since SQLite version 3.6.19 possible.

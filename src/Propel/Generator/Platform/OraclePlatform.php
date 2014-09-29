@@ -32,6 +32,11 @@ class OraclePlatform extends DefaultPlatform
 {
 
     /**
+     * @var boolean whether the identifier quoting is enabled
+     */
+    protected $isIdentifierQuotingEnabled = false;
+
+    /**
      * Initializes db specific domain mapping.
      */
     protected function initialize()

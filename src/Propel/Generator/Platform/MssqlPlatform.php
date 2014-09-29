@@ -23,6 +23,12 @@ use Propel\Generator\Model\Table;
  */
 class MssqlPlatform extends DefaultPlatform
 {
+
+    /**
+     * @var boolean whether the identifier quoting is enabled
+     */
+    protected $isIdentifierQuotingEnabled = false;
+
     protected static $dropCount = 0;
 
     /**
