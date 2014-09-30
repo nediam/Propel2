@@ -10,6 +10,9 @@
 
 namespace Propel\Tests\Runtime\Util;
 
+use Propel\Runtime\Adapter\Pdo\MssqlAdapter;
+use Propel\Runtime\Adapter\Pdo\PgsqlAdapter;
+use Propel\Tests\Bookstore\Map\PublisherTableMap;
 use Propel\Tests\Helpers\Bookstore\BookstoreTestBase;
 use Propel\Tests\Bookstore\BookQuery;
 use Propel\Tests\Bookstore\Bookstore;
@@ -43,7 +46,7 @@ class TableMapTest extends BookstoreTestBase
             $c = new Criteria();
             $c->setDistinct();
             if ($db instanceof PgsqlAdapter) {
-                $c->addSelectColumn("substring(".BookTableMap::TITLE." from position('Potter' in ".BookTableMap::TITLE.")) AS col");
+                $c->addSelectColumn("substring(".BookTableMap::COL_TITLE." from position('Potter' in ".BookTableMap::COL_TITLE.")) AS col");
             } else {
                 $this->markTestSkipped('Configured database vendor is not PostgreSQL');
             }
@@ -83,7 +86,7 @@ class TableMapTest extends BookstoreTestBase
         $c->setLimit(3);
         try {
             $count = $c->doCount($con);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->fail('doCount() cannot deal with a criteria selecting duplicate column names ');
         }
     }
@@ -367,7 +370,7 @@ class TableMapTest extends BookstoreTestBase
         try {
             $rowCount = $book->save($con);
             $this->assertEquals(0, $rowCount, 'save() should indicate zero rows updated');
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->fail('save() threw an exception');
         }
 
